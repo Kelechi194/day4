@@ -84,10 +84,11 @@
     <div class="in">
     <label for="Username">Username</label> 
     <input type="text" name="username" placeholder="Example" >
-
+    <span><?php echo "$usernameerror"; ?></span>
     <label for="Password">Password</label>
     <input type="Password" name="password" placeholder="1swd23UHG">
-</div>
+    <span><?php echo "$passworderror"; ?></span>
+    </div>
     <div class="b">
     <button name="log" type="submit">Log In</button>
 </div>
@@ -98,7 +99,8 @@
 
 
     <?php
-
+$usernameerror=' ';
+$passworderror=' ';
 
    // Username and Password Validation
 
@@ -114,22 +116,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     # present  format check for username
 
     if(empty($username)){
-        echo "<small>Please input a username</small>";
+        $usernameerror = "<small>Please input a username</small>";
     }
+//length check for username
+         if(strlen($username < 4 )){
+        $usernameerror = "<small>username must be above 4 characters.</small>";
+     }
+        
+//username sanitization
+        $username = filter_input(INPUT_POST,"username",FILTER_SANITIZE_SPECIAL_CHARS);
+         $usernmae = trim($_POST['username']);
 
-
-   
-    # Present/lenght/format check for password
+        
+    # Present check for password
 
         if(empty($password)){
-            echo "<p>please input a password</p>.";
+            $passworderror ="<p>please input a password</p>.";
         }
 
-
-
+//lenght check for password
      if(strlen($password < 8 )){
-        echo "<p>Password must be above 8 characters.</p>";
+        $passworderror "<p>Password must be above 8 characters.</p>";
      }
+//format check for password
+        if(preg_match(/^[a-zA-Z0-9]+$/, $password){
+            $passworderror = "Password must contian a number,lowercase letter and an uppercase letter";
+        }
 
     }
 }
